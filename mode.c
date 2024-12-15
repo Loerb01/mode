@@ -2,6 +2,7 @@
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "mode_file.h"
 
 struct cursLoc {
@@ -81,7 +82,6 @@ int main(int argc, char** argv) {
 					workingLine = workingLine->nextLine;
 					workingLineNum++;
 				}
-				cursLoc.x = 0;
 				break;
 
 			case 'e':
@@ -96,12 +96,13 @@ int main(int argc, char** argv) {
 					workingLine = workingLine->prevLine;
 					workingLineNum--;
 				}
-				cursLoc.x = 0;
 				break;
 
 			case 't':
 				if(workingLine->line[cursLoc.x] == '\n' || cursLoc.x == max_x) {
-
+					cursLoc.x = strlen(workingLine->line);
+				}else if(cursLoc.x >= strlen(workingLine->line)){
+					cursLoc.x = strlen(workingLine->line);
 				}else {
 					cursLoc.x++;
 				}
