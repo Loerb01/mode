@@ -1,6 +1,6 @@
 #include "mode_file.h"
 #include <stdio.h>
-#include <limits.h>
+#include <linux/limits.h>
 #include <string.h>
 #include <stdlib.h>
 
