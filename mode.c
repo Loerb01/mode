@@ -99,10 +99,8 @@ int main(int argc, char** argv) {
 				break;
 
 			case 't':
-				if(workingLine->line[cursLoc.x] == '\n' || cursLoc.x == max_x) {
-					cursLoc.x = strlen(workingLine->line);
-				}else if(cursLoc.x >= strlen(workingLine->line)){
-					cursLoc.x = strlen(workingLine->line);
+				if(workingLine->line[cursLoc.x] == '\n' || cursLoc.x == max_x || cursLoc.x >= strlen(workingLine->line)-1) {
+					cursLoc.x = strlen(workingLine->line)-1;
 				}else {
 					cursLoc.x++;
 				}
