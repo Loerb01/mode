@@ -15,11 +15,13 @@ typedef struct mode_Line {
 typedef struct mode_File {
 	char* path;
 	int lines;
+	bool modified;
 	mode_Line* firstLine;
 } mode_File;
 
 mode_File* mode_openFile(char* path);
-void mode_saveFile(mode_File);
-mode_Line* addLine(mode_Line* toAddAfter);
+void mode_saveFile(mode_File* toSave);
+mode_Line* mode_addLine(mode_Line* toAddAfter);
+void mode_delLine(mode_Line* toDelete);
 void mode_closeFile(mode_File* toClose);
 void mode_removeLine(mode_Line* toRemove);

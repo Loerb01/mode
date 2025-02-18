@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -std=c23 -g -O2
+CFLAGS = -std=c23 -g -O0
 LIBS = ncurses
 LDFLAGS = $(shell pkg-config $(LIBS) --cflags)
 LDLIBS = $(shell pkg-config $(LIBS) --libs)

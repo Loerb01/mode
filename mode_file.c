@@ -17,6 +17,9 @@ mode_File* mode_openFile(char* path) {
 
 	//Don't keep file handles open
 	FILE* toOpen = fopen(ret_F->path, "r");
+	if(toOpen == NULL) {
+		return NULL;
+	}
 
 	//The line we're currently working with
 	mode_Line* toWrite;
@@ -54,7 +57,7 @@ mode_File* mode_openFile(char* path) {
 		//Handle new lines
 		if(charGotten == '\n') {
 			toWrite->line[lineLoc] = '\n';
-			toWrite = addLine(toWrite);
+			toWrite = mode_addLine(toWrite);
 			ret_F->lines++;
 			lineLoc = 0;
 		}else {
@@ -63,15 +66,29 @@ mode_File* mode_openFile(char* path) {
 	}
 
 	fclose(toOpen);
+	toOpen = NULL;
+
+	ret_F->modified = false;
 
 	return ret_F;
 }
 
-void mode_saveFile(mode_File) {
+void mode_saveFile(mode_File* toSave) {
+	FILE* toWrite = fopen(toSave->path, "w");
 
+	mode_Line* currLine = toSave->firstLine;
+	while(currLine != NULL) {
+		fputs(currLine->line, toWrite);
+		currLine = currLine->nextLine; //2 ~4GB files tells me that this is a very important loc
+	}
+
+	fflush(toWrite);
+	fclose(toWrite);
+	toWrite = NULL;
+	toSave->modified = false;
 }
 
-mode_Line* addLine(mode_Line* toAddAfter) {
+mode_Line* mode_addLine(mode_Line* toAddAfter) {
 	if(!(toAddAfter->nextLine = malloc(sizeof(mode_Line)))) {
 		exit(-99);
 	}
@@ -92,6 +109,7 @@ void mode_closeFile(mode_File* toClose) {
 
 	mode_Line* lineToClose = toClose->firstLine;
 
+	//TODO: This is stupid, why did I traverse first, be more traditional idiot
 	//Get last line struct
 	while(lineToClose->nextLine != NULL) {
 		lineToClose = lineToClose->nextLine;
